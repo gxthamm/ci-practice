@@ -14,7 +14,7 @@ def test_is_valid_email(email, expected):
 
 @pytest.mark.parametrize("age, expected", [(17, False), (18, True), (45, True)])
 def test_is_adult(age, expected):
-    assert not is_adult(age) is expected
+    assert is_adult(age) is expected
 
 
 def test_normalize_phone():
