@@ -25,7 +25,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        shard: [1, 2, 3, 4]
+        python-version: ["3.11", "3.12"]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -33,12 +33,12 @@ jobs:
           python-version: "3.12"
           cache: pip
       - run: pip install -r requirements.txt
-      - run: pytest -m "not quarantine" --splits 4 --group ${{ matrix.shard }} --junitxml=report-${{ matrix.shard }}.xml -v
+      - run: pytest -m "not quarantine" --splits 4 --group ${{ matrix.python-version }} --junitxml=report-${{ matrix.shard }}.xml -v
       - name: Save test report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: junit-report-${{ matrix.shard }}
+          name: name: junit-report-${{ matrix.python-version }}
           path: report-${{ matrix.shard }}.xml
 
   # ---------- Задание 5: карантин ----------
