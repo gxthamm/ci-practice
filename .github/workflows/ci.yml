@@ -7,7 +7,6 @@ on:
     branches: [main]
 
 jobs:
-  # ---------- Задание 2: lint ----------
   lint:
     runs-on: ubuntu-latest
     steps:
@@ -18,7 +17,6 @@ jobs:
       - run: pip install ruff
       - run: ruff check .
 
-  # ---------- Задания 3–5: unit с matrix-shard, кэшем, JUnit, карантином ----------
   unit:
     needs: lint
     runs-on: ubuntu-latest
@@ -41,7 +39,6 @@ jobs:
           name: junit-report-${{ matrix.shard }}
           path: report-${{ matrix.shard }}.xml
 
-  # ---------- Задание 5: карантин ----------
   quarantine:
     runs-on: ubuntu-latest
     continue-on-error: true
@@ -54,7 +51,6 @@ jobs:
       - run: pip install -r requirements.txt
       - run: pytest -m quarantine -v
 
-  # ---------- Задание 6: Docker ----------
   docker-tests:
     needs: lint
     runs-on: ubuntu-latest
@@ -62,11 +58,3 @@ jobs:
       - uses: actions/checkout@v4
       - run: docker build -t ci-practice-tests .
       - run: docker run --rm ci-practice-tests
-
-  # ---------- Задание 7: деплой-заглушка ----------
-  deploy-staging:
-    needs: [unit, docker-tests]
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "Деплой на staging выполнен (имитация)"
